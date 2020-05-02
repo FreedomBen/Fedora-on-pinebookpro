@@ -1,5 +1,7 @@
 # Fedora-on-pinebookpro
 
+*NOTE:  I originally forked this repo with the intention of making improvements and sending them upstream, but the upstream appears to be abandoned.  If you make improvements and want to collaborate, either send a PR to this repo or let me know where yours is and I'll send them to you.  I don't particularly need another project but I don't want this to languish either.*
+
 This image contains a base install of Fedora with the Gnome desktop environment. To my surprise, Gnome runs the fastest of any desktop environment I tried with Fedora! Selinux is enabled and set to enforcing mode.
 
 grab the image here:
