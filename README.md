@@ -1,24 +1,36 @@
 # Fedora-on-pinebookpro
 
-*NOTE:  I originally forked this repo with the intention of making improvements and sending them upstream, but the upstream appears to be abandoned.  If you make improvements and want to collaborate, either send a PR to this repo or let me know where yours is and I'll send them to you.  I don't particularly need another project but I don't want this to languish either.*
+This image contains a base install of Fedora with the GNOME desktop environment. 
 
-This image contains a base install of Fedora with the Gnome desktop environment. To my surprise, Gnome runs the fastest of any desktop environment I tried with Fedora! Selinux is enabled and set to enforcing mode.
+Note: Compared to other desktop environements, GNOME 3 seems to run the fastest with Fedora.
+Selinux is enabled and set to enforcing mode.
 
-grab the image here:
+The image can be downloaded using this link: 
 
 https://sourceforge.net/projects/opensuse-on-pinebookpro/files/Rel_2/
 
-Instructions: You must have more than 16G of space to write this image! Preferably 32G or larger
+The default root password is `linux`.
 
-To write image to sdcard from a linux pc:
+## Instructions
 
+You must have a SD card with at least 16 GB of storage; preferably 32 GB.
+
+### To flash the image to your SD card
 ```bash
 xzcat fedora-pinebookpro-gnome-0.8.img.xz \
   | dd bs=4M of=/dev/mmcblkX iflag=fullblock oflag=direct status=progress \
  && sync
 ```
+This will allow you to boot Fedora from the SD card. 
 
-Because of the level of compression I used, writing this image to internal disk from pinebookpro via an os running on a sdcard to internal memory requires you
+### To flash the image on the internal storage of the Pinebook Pro 
+
+To install the Fedora image on the internal storage (eMMC or, if installed, NVME SSD) of the Pinebook Pro, follow these instructions instead. 
+
+You should have an SD card with a linux distribution installed on it. 
+
+
+Because of the level of compression used, writing this image to the internal storage from pinebookpro via an os running on a sdcard requires you
 
 ```bash
 unxz --threads=$(nproc) -6e fedora-pinebookpro-gnome-0.8.img.xz
@@ -35,49 +47,53 @@ dd \
   bs=32M
 ```
 
-The root password is "linux".
 
-## Caveats
+## Installation and configuration
 
-This image boots up slowly. Especially on the first boot, give it 3-4 minutes. I'm going to play around with the kernel configuration to speed this up. I've had the same issue with my opensuse image as well. Once you've booted up and logged in, It's smooth sailing. Also, thanks to the Manjaro team, suspend and resume is now working, so you shouldn't have to powerdown and poweron all that much! Thanks again guys!
+This image boots up slowly; on the first boot, give it at least 4 to 5 minutes. 
 
-____________________________________________________________________________________________________________________________
+Once the image has booted, the Fedora installation. Simply follow the Fedora Installation instructions. I
+https://docs.fedoraproject.org/en-US/fedora/rawhide/install-guide/
 
-Once you boot, give it a couple of minutes and the Fedora setup screen will appear, just as it would after a desktop install. Create your username, password, etc. I'd also recommend changing the root password to something other than "linux". After you're set up, open a terminal and type:
+After the installation is complete, it is recommended that you change the default root password `Linux` to something more secure. 
+To do so, open a terminal and type:
 
 ```bash
 sudo passwd root
 ```
+You will then be prompted to change it. 
 
-Then change it.
 
-After that, you'll need to resize the root partition to fill the entirety of your disk. So type:
+You need to resize the root partition to fill the entirety of your disk. 
+To do so, type:
  
 ```bash
 sudo cfdisk /dev/mmcblkX
 ```
 
-(the X stands for your disk number. You can get this with the `lsblk` command)
+X stands for your disk number. You can find your disk number using the `lsblk` command.
 
-Then resize the 6th partition resize it to the end. Scroll over to write, hit enter, type yes when it asks for "yes or no", and then quit. After that, type:
+Resize the 6th partition to the end. Scroll over to write, hit enter, type yes when it asks for "yes or no", and then quit. 
+
+After that, type:
 
 ```bash
 sudo resize2fs /dev/mmcblkXp6
 ```
 
-Then, open gnome-tweaks and turn animations off. It's just going to slow things down, and it performs much better without them.
-Also, Chromium runs a lot faster than Firefox on this setup, so if you want it, just run:
+### Animations 
+To make your experience smoother, it is recommended to you turn the animations off. 
+To turn them off, open `gnome-tweaks` -> General Tab -> switch Animations off.
 
-```bash
-sudo dnf install chromium -y
-```
+### remove boot variable
+Once you know that your system is stable, you can remove the boot variable "maxcpus=4" from /boot/extlinux/extlinux.conf.
+This will give you another cpu thread and a considerable speed boost. Disabling it seems to add stability as well.
 
-Then you're good to go.
+To get the audio to work, you'll need to unmute 'Left Headphone Mixer Left DAC' and 'Right Headphone Mixer Right DAC'. 
+Unfortunately, `gnome-alsamixer`isn't available in the official repository but it can be grabbed here:  https://rpmfind.net/linux/rpm2html/search.php?query=gnome-alsamixer
 
-Once you know that your system is stable, you can remove the boot variable "maxcpus=4" from /boot/extlinux/extlinux.conf, and that will give you another cpu thread, and a surprisingly huge speed boost. Disabling seems to add stability, but removing it on the image I'm currently on hasn't caused any problems.
+Thanks to the Manjaro team, suspend and resume is now working correctly. 
 
-To get audio working, you'll need to unmute 'Left Headphone Mixer Left DAC' and 'Right Headphone Mixer Right DAC'. Gnome-alsamixer isn't available in the official repos but it can be grabbed here:  https://rpmfind.net/linux/rpm2html/search.php?query=gnome-alsamixer
 
-I'll be creating and adding kernel rpm's up here somewhat frequently. This image contains the latest kernel from the pinebook pro gitlab page. I'll probably start creating two kernels for both my Fedora images and openSUSE images. One with an selinux label and the other with an apparmor label. Both could be used on either os, given your preferences.
 
-Anyway, hope you enjoy, and let me know if there are any issues!
+*NOTE: This repository was forked from the original one with the intention of making improvements and sending them upstream. Unfortunately, the upstream repository appears to be abandoned.  If you would like to make improvements and want to collaborate, you can send a pull request to this repository.
