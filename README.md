@@ -26,7 +26,7 @@ You must have a SD card with at least 16 GB of storage; preferably 32 GB.
 ```bash
 xzcat fedora-pinebookpro-gnome-0.8.img.xz | dd bs=4M of=/dev/mmcblkX iflag=fullblock oflag=direct status=progress && sync
 ```
-This will install Fedora on the SD card, and allow you to boot from it. 
+This will install Fedora on the SD card and allow you to boot from it. 
 
 ### To flash the image on the internal storage of the Pinebook Pro 
 
