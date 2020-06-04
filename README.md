@@ -1,4 +1,4 @@
-# Fedora-on-pinebookpro
+# Fedora on the Pinebook Pro
 This repository serves as an installation guide for Fedora on the Pinebook Pro. 
 
 The Pinebook Pro is a Free and Open Source Arm 64-Bit laptop made by PINE64, a community driven company focused on creating ARM devices.
