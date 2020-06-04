@@ -8,7 +8,7 @@ You can learn more about PINE64 <a href="/https://www.pine64.org/">here</a>.
 
 ## Download 
 This image contains a base installation of Fedora with the GNOME desktop environment. 
-Selinux is enabled and set to enforcing mode.
+SELinux is enabled and set to enforcing mode.
 
 The Fedora image can be downloaded using this link: 
 
