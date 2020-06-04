@@ -1,83 +1,98 @@
 # Fedora-on-pinebookpro
+This repository serves as an installation guide for Fedora on the Pinebook Pro. 
 
-*NOTE:  I originally forked this repo with the intention of making improvements and sending them upstream, but the upstream appears to be abandoned.  If you make improvements and want to collaborate, either send a PR to this repo or let me know where yours is and I'll send them to you.  I don't particularly need another project but I don't want this to languish either.*
+The Pinebook Pro is a Free and Open Source Arm 64-Bit laptop made by PINE64, a community driven company focused on creating ARM devices.
 
-This image contains a base install of Fedora with the Gnome desktop environment. To my surprise, Gnome runs the fastest of any desktop environment I tried with Fedora! Selinux is enabled and set to enforcing mode.
+You can learn more about PINE64 <a href="/https://www.pine64.org/">here</a>. 
 
-grab the image here:
+
+## Download 
+This image contains a base installation of Fedora with the GNOME desktop environment. 
+Selinux is enabled and set to enforcing mode.
+
+The Fedora image can be downloaded using this link: 
 
 https://sourceforge.net/projects/opensuse-on-pinebookpro/files/Rel_2/
 
-Instructions: You must have more than 16G of space to write this image! Preferably 32G or larger
+The default root password is `linux`.
 
-To write image to sdcard from a linux pc:
+## Instructions
+You must have a SD card with at least 16 GB of storage; preferably 32 GB.
 
+### To flash the image to the SD card
+- Plug your SD Card in your computer.
+- Download the Fedora image.
+- Open the terminal and run:
 ```bash
-xzcat fedora-pinebookpro-gnome-0.8.img.xz \
-  | dd bs=4M of=/dev/mmcblkX iflag=fullblock oflag=direct status=progress \
- && sync
+xzcat fedora-pinebookpro-gnome-0.8.img.xz | dd bs=4M of=/dev/mmcblkX iflag=fullblock oflag=direct status=progress && sync
 ```
+This will install Fedora on the SD card and allow you to boot from it. 
 
-Because of the level of compression I used, writing this image to internal disk from pinebookpro via an os running on a sdcard to internal memory requires you
+### To flash the image on the internal storage of the Pinebook Pro 
 
+To install the Fedora image on the internal storage (eMMC or, if installed, NVME SSD) of the Pinebook Pro, follow these instructions instead. 
+You should have a bootable SD card for your Pinebook Pro with a linux distribution installed on it. 
+- Boot from the SD card.
+- Download the Fedora image or copy it to the Pinebook Pro.
+
+Because of the level of compression used, writing the image to the interal storage requires you to unlock the Pinebook Pro threads.
+- Decompress the image and unlock the threads:
 ```bash
 unxz --threads=$(nproc) -6e fedora-pinebookpro-gnome-0.8.img.xz
 ```
-
-from a linux pc, then you can copy the disk image to the os running on pinebookpro via sdcard and enter:
-
+- To install on the internal storage:
 ```bash
-dd \
-  if=fedora-pinebookpro-gnome-0.8.img \
-  of=/dev/mmcblkX \
-  oflag=sync \
-  status=progress \
-  bs=32M
+dd if=fedora-pinebookpro-gnome-0.8.img of=/dev/mmcblkX oflag=sync status=progress bs=32M
 ```
 
-The root password is "linux".
+## Installation and configuration
+This image boots up slowly. On the first boot, give it at least 4 to 5 minutes. 
 
-## Caveats
+Once the image has booted, Simply follow the Fedora Installation instructions. 
+- If needed, the official Fedora Installation Guide is avalaible <a href="https://docs.fedoraproject.org/en-US/fedora/rawhide/install-guide/">here</a>. 
 
-This image boots up slowly. Especially on the first boot, give it 3-4 minutes. I'm going to play around with the kernel configuration to speed this up. I've had the same issue with my opensuse image as well. Once you've booted up and logged in, It's smooth sailing. Also, thanks to the Manjaro team, suspend and resume is now working, so you shouldn't have to powerdown and poweron all that much! Thanks again guys!
-
-____________________________________________________________________________________________________________________________
-
-Once you boot, give it a couple of minutes and the Fedora setup screen will appear, just as it would after a desktop install. Create your username, password, etc. I'd also recommend changing the root password to something other than "linux". After you're set up, open a terminal and type:
-
+## Post installation
+### Root password
+After the installation is complete, it is recommended that you change the default root password `linux` to something more secure.
+- Open a terminal and run:
 ```bash
 sudo passwd root
 ```
+You will then be prompted to change it. 
 
-Then change it.
-
-After that, you'll need to resize the root partition to fill the entirety of your disk. So type:
- 
+## Resizing root partition
+- Resize the 6th partition to fill the entirety of your disk:
 ```bash
 sudo cfdisk /dev/mmcblkX
-```
 
-(the X stands for your disk number. You can get this with the `lsblk` command)
-
-Then resize the 6th partition resize it to the end. Scroll over to write, hit enter, type yes when it asks for "yes or no", and then quit. After that, type:
-
-```bash
 sudo resize2fs /dev/mmcblkXp6
 ```
+Note: X stands for your disk number. You can find your disk number using the `lsblk` command.
+### Animations 
+To make your experience smoother, it is recommended to turn the animations off. 
+- Open `gnome-tweaks` -> General Tab -> switch Animations off.
 
-Then, open gnome-tweaks and turn animations off. It's just going to slow things down, and it performs much better without them.
-Also, Chromium runs a lot faster than Firefox on this setup, so if you want it, just run:
+### Audio
 
-```bash
-sudo dnf install chromium -y
-```
+The easiest way to get the audio to work properly is by using the `gnome-alsamixer`. 
 
-Then you're good to go.
+However,`gnome-alsamixer`isn't available in the official repository. You can download it <a href="/https://rpmfind.net/linux/rpm2html/search.php?query=gnome-alsamixer/">here</a>.
+- unmute both 'Left Headphone Mixer Left DAC' and 'Right Headphone Mixer Right DAC'.
 
-Once you know that your system is stable, you can remove the boot variable "maxcpus=4" from /boot/extlinux/extlinux.conf, and that will give you another cpu thread, and a surprisingly huge speed boost. Disabling seems to add stability, but removing it on the image I'm currently on hasn't caused any problems.
+### Remove boot variable
+Once your system is configured and stable:
+- remove the boot variable `maxcpus=4` from `/boot/extlinux/extlinux.conf`.
 
-To get audio working, you'll need to unmute 'Left Headphone Mixer Left DAC' and 'Right Headphone Mixer Right DAC'. Gnome-alsamixer isn't available in the official repos but it can be grabbed here:  https://rpmfind.net/linux/rpm2html/search.php?query=gnome-alsamixer
+This will give you another CPU thread and a considerable speed boost. Disabling it seems to add stability as well.
 
-I'll be creating and adding kernel rpm's up here somewhat frequently. This image contains the latest kernel from the pinebook pro gitlab page. I'll probably start creating two kernels for both my Fedora images and openSUSE images. One with an selinux label and the other with an apparmor label. Both could be used on either os, given your preferences.
+## Getting help
+Official PINE64 Wiki:https://wiki.pine64.org/index.php/Main_Page/
 
-Anyway, hope you enjoy, and let me know if there are any issues!
+PINE64 Forum: https://forum.pine64.org/
+
+If you're having difficulties installing an OS image on your PINE64 device, you can use the <a href="/https://github.com/pine64dev/PINE64-Installer/blob/master/README.md/">official PINE64 Installer</a>.
+
+Note: Fedora is not avalaible using the PINE64 Installer. 
+
+## About
+*This repository was forked from the original one with the intention of making improvements and sending them upstream. Unfortunately, the upstream repository appears to be abandoned. If you would like to make improvements or would like to collaborate, feel free to send a pull request to this repository instead.*
