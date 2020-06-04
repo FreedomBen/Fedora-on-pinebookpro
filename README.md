@@ -1,14 +1,13 @@
 # Fedora-on-pinebookpro
 This repository serves as an installation guide for Fedora on the Pinebook Pro. 
 
-The Pinebook Pro is a Free and Open Souce Arm 64-Bit laptop made by PINE64, a community driven company focused on creating high-quality, low cost ARM devices.
+The Pinebook Pro is a Free and Open Source Arm 64-Bit laptop made by PINE64, a community driven company focused on creating ARM devices.
 
 You can learn more about PINE64 <a href="/https://www.pine64.org/">here</a>. 
 
 
 ## Download 
 This image contains a base installation of Fedora with the GNOME desktop environment. 
-Compared to other desktop environements, GNOME 3 seems to run the fastest with Fedora.
 
 Selinux is enabled and set to enforcing mode.
 
@@ -33,7 +32,7 @@ This will install Fedora on the SD card and allow you to boot from it.
 ### To flash the image on the internal storage of the Pinebook Pro 
 
 To install the Fedora image on the internal storage (eMMC or, if installed, NVME SSD) of the Pinebook Pro, follow these instructions instead. 
-You should have an bootable SD card for your Pinebook Pro with a linux distribution installed on it. 
+You should have a bootable SD card for your Pinebook Pro with a linux distribution installed on it. 
 - Boot from the SD card.
 - Download the Fedora image or copy it to the Pinebook Pro.
 
@@ -51,7 +50,7 @@ dd if=fedora-pinebookpro-gnome-0.8.img of=/dev/mmcblkX oflag=sync status=progres
 This image boots up slowly. On the first boot, give it at least 4 to 5 minutes. 
 
 Once the image has booted, Simply follow the Fedora Installation instructions. 
-If needed, the official Fedora Installation Guide is avalaible <a href="https://docs.fedoraproject.org/en-US/fedora/rawhide/install-guide/">here</a>. 
+- If needed, the official Fedora Installation Guide is avalaible <a href="https://docs.fedoraproject.org/en-US/fedora/rawhide/install-guide/">here</a>. 
 
 ## Post installation
 ### Root password
@@ -76,7 +75,7 @@ To make your experience smoother, it is recommended to turn the animations off.
 
 ### Audio
 
-The easiest way to do get the audio to work properly is by using the `gnome-alsamixer`. 
+The easiest way to get the audio to work properly is by using the `gnome-alsamixer`. 
 
 However,`gnome-alsamixer`isn't available in the official repository. You can download it <a href="/https://rpmfind.net/linux/rpm2html/search.php?query=gnome-alsamixer/">here</a>.
 - unmute both 'Left Headphone Mixer Left DAC' and 'Right Headphone Mixer Right DAC'.
@@ -84,13 +83,16 @@ However,`gnome-alsamixer`isn't available in the official repository. You can dow
 ### Remove boot variable
 Once your system is configured and stable:
 - remove the boot variable `maxcpus=4` from `/boot/extlinux/extlinux.conf`.
+
 This will give you another CPU thread and a considerable speed boost. Disabling it seems to add stability as well.
 
 ## Getting help
 Official PINE64 Wiki:https://wiki.pine64.org/index.php/Main_Page/
+
 PINE64 Forum: https://forum.pine64.org/
 
 If you're having difficulties installing an OS image on your PINE64 device, you can use the <a href="/https://github.com/pine64dev/PINE64-Installer/blob/master/README.md/">official PINE64 Installer</a>.
+
 Note: Fedora is not avalaible using the PINE64 Installer. 
 
 ## About
