@@ -22,7 +22,7 @@ You must have a SD card with at least 16 GB of storage; preferably 32 GB.
 ### To flash the image to the SD card
 - Plug your SD Card in your computer.
 - Download the Fedora image.
-- Open the Terminal and run:
+- Open the terminal and run:
 ```bash
 xzcat fedora-pinebookpro-gnome-0.8.img.xz | dd bs=4M of=/dev/mmcblkX iflag=fullblock oflag=direct status=progress && sync
 ```
