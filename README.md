@@ -36,7 +36,7 @@ You should have a bootable SD card for your Pinebook Pro with a linux distributi
 - Download the Fedora image or copy it to the Pinebook Pro.
 
 Because of the level of compression used, writing the image to the interal storage requires you to unlock the Pinebook Pro threads.
-- Decompress the image an unlock the threads:
+- Decompress the image and unlock the threads:
 ```bash
 unxz --threads=$(nproc) -6e fedora-pinebookpro-gnome-0.8.img.xz
 ```
